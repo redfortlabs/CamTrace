@@ -32,9 +32,7 @@ def on_startup():
      # NEW: allow disabling scheduler for tests/CI
     if os.getenv("DISABLE_SCHEDULER", "0") == "1":
         return
-
     
-    from sqlalchemy.orm import sessionmaker
     from .models import get_sessionmaker
     SessionLocal = get_sessionmaker(engine)
     
