@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import timezone
+import os
 from .models import Base, get_engine
 from .routers import ingest, admin
 from .enrich import init_geoip, close_geoip
@@ -27,10 +28,16 @@ def on_startup():
     Base.metadata.create_all(bind=engine)
     # GeoIP
     init_geoip()
-    # Scheduler: daily report 23:55 local
-    import os
+
+     # NEW: allow disabling scheduler for tests/CI
+    if os.getenv("DISABLE_SCHEDULER", "0") == "1":
+        return
+
+    
+    from sqlalchemy.orm import sessionmaker
     from .models import get_sessionmaker
     SessionLocal = get_sessionmaker(engine)
+    
     def job():
         db = SessionLocal()
         try:
