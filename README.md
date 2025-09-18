@@ -1,6 +1,6 @@
 # CamTrace (Minimal MVP)
 
-A tight-scope service to observe where home cameras talk on the internet.
+CamTrace is a lightweight, focused monitoring service that ingests connection logs from home security cameras, enriches them with RDNS/ASN/GeoIP data, and alerts when devices communicate outside their allowlist, whether from home security cameras, IoT appliances, SCADA systems, or other high-value endpoints.
 
 **Scope**
 - Python + FastAPI service
