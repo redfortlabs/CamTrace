@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  camtrace:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./maxmind:/app/maxmind
+      - ./allowlist.yaml:/app/allowlist.yaml
+    environment:
+      - MAXMIND_ASN_DB=/app/maxmind/GeoLite2-ASN.mmdb
+      - MAXMIND_CITY_DB=/app/maxmind/GeoLite2-City.mmdb
+      - SMTP_HOST
+      - SMTP_PORT
+      - SMTP_USER
+      - SMTP_PASSWORD
+      - SMTP_FROM
+      - ALERT_RECIPIENTS
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

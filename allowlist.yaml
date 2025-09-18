@@ -1,0 +1,8 @@
+cameras:
+  example_cam:
+    allowed_asns: [15169]     # Example: Google
+    allowed_domains:
+      - "nvr.local"
+      - "update.vendor.example"
+    allowed_cidrs:
+      - "192.168.1.0/24"
