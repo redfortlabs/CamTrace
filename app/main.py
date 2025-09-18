@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import timezone
 from .models import Base, get_engine
@@ -51,5 +51,3 @@ def on_shutdown():
     if getattr(app.state, "scheduler", None):
         app.state.scheduler.shutdown()
 
-# FastAPI Response import
-from fastapi import Response
