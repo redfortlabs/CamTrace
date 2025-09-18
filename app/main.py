@@ -29,7 +29,6 @@ def on_startup():
     init_geoip()
     # Scheduler: daily report 23:55 local
     import os
-    from sqlalchemy.orm import sessionmaker
     from .models import get_sessionmaker
     SessionLocal = get_sessionmaker(engine)
     def job():
