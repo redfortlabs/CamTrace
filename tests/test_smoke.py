@@ -1,3 +1,6 @@
+import os
+os.environ["DISABLE_SCHEDULER"] = "1"  # must be set before importing app
+
 from fastapi.testclient import TestClient
 from app.main import app
 
