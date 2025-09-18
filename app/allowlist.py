@@ -1,6 +1,5 @@
 import yaml
 import ipaddress
-from typing import Any
 
 class Allowlist:
     def __init__(self, path: str = "allowlist.yaml"):

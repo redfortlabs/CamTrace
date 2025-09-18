@@ -5,7 +5,8 @@ Placeholder agent that POSTs a fake event to the CamTrace /ingest endpoint.
 In real usage, you might tail pfSense logs or summarize flows from a SPAN port,
 then POST JSON records here.
 """
-import requests, datetime
+import requests
+import datetime
 
 def main():
     evt = {
