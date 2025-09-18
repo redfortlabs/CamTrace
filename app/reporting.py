@@ -61,6 +61,23 @@ def generate_markdown_report(
                     loc=loc,
                 )
             )
+
+        for e in violations[:500]:
+            loc = ", ".join([x for x in [e.city, e.region, e.country] if x])
+            lines.append(
+                "| {ts} | {cam} | {ip} | {port} | {proto} | {asn} | {asorg} | "
+                "{rdns} | {loc} |".format(
+                    ts=e.timestamp.isoformat(),
+                    cam=e.camera_id,
+                    ip=e.dst_ip,
+                    port=e.dst_port,
+                    proto=e.protocol,
+                    asn=e.asn or "",
+                    asorg=e.as_org or "",
+                    rdns=e.rdns or "",
+                    loc=loc,
+                )
+            )
     else:
         lines.append("_No violations in window._")
 
