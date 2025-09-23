@@ -1,9 +1,24 @@
-# Environment variables (secrets, API keys, etc.)
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual envs
+.venv/
+venv/
+
+# Local environment (secrets/paths)
 .env
 
-# MaxMind GeoLite databases
+# MaxMind GeoLite databases (license-restricted, local only)
 data/maxmind/*.mmdb
 data/maxmind/*.tar.gz
 data/maxmind/*_*/
-.DS_Store
-.DS_Store
+
+# Build / dist
+build/
+dist/
+*.egg-info/
