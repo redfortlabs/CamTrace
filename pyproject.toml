@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "camtrace"
+version = "0.1.0"
+description = "CamTrace network flow enrichment (PTR/ASN/Geo via local MaxMind DBs)"
+authors = [{name="Tyler Carruth"}]
+dependencies = [
+  "python-dotenv",
+  "geoip2",
+  "dnspython",
+  "pydantic",
+]
+
+[project.scripts]
+camtrace = "camtrace.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["camtrace"]
