@@ -1,0 +1,7 @@
+# Environment variables (secrets, API keys, etc.)
+.env
+
+# MaxMind GeoLite databases
+data/maxmind/*.mmdb
+data/maxmind/*.tar.gz
+data/maxmind/*_*/
