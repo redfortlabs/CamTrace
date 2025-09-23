@@ -6,3 +6,4 @@ data/maxmind/*.mmdb
 data/maxmind/*.tar.gz
 data/maxmind/*_*/
 .DS_Store
+.DS_Store
