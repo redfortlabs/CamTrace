@@ -4,7 +4,7 @@ CamTrace is a lightweight tool that takes raw network flow logs from IoT and oth
 
 CamTrace enriches those flows by adding:
 
-- ** Reverse DNS (PTR)** lookups → shows the hostname tied to an IP  
+- **Reverse DNS (PTR)** lookups → shows the hostname tied to an IP  
 - **ASN ownership** → identifies the network owner (e.g., Google, Cloudflare)  
 - **GeoIP data** → adds country, city, and latitude/longitude
 
