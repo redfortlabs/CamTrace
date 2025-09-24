@@ -1,10 +1,19 @@
 # CamTrace — IP Enrichment (PTR / ASN / Geo)
 
-CamTrace enriches network flow logs with: 
-- Reverse DNS (PTR) lookups 
-- ASN ownership (via MaxMind GeoLite2-ASN)
-- GeoIP country/city/lat/long (via MaxMind GeoLite2-City)
-- This runs fully locally using your downloaded MaxMind databases.
+CamTrace is a lightweight tool that takes raw network flow logs from IoT and other connected devices and makes them easier to understand. Out of the box, flow records usually only show IP addresses — which can be cryptic and hard to interpret.  
+
+CamTrace enriches those flows by adding:
+
+- ** Reverse DNS (PTR)** lookups → shows the hostname tied to an IP  
+- **ASN ownership** → identifies the network owner (e.g., Google, Cloudflare)  
+- **GeoIP data** → adds country, city, and latitude/longitude
+
+This makes it much simpler to answer questions like:
+- “Which external services is this device talking to?”  
+- “Are flows leaving the country?”  
+- “Which organizations own the IP ranges my IoT devices connect to?”
+
+Everything runs locally on your machine using MaxMind’s free GeoLite2 databases, so no data is sent outside your environment.
 
 ---
 
