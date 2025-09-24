@@ -16,7 +16,12 @@ dependencies = [
 
 [project.scripts]
 camtrace = "camtrace.cli:main"
+camtrace-capture = "camtrace.capture_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 packages = ["camtrace"]
+
+[tool.setuptools.package-data]
+camtrace = ["bin/pcap_to_camtrace.sh"]
+
