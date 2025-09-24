@@ -18,6 +18,7 @@ Everything runs locally on your machine using MaxMind’s free GeoLite2 database
 ---
 
 ## Setup
+
 ### 1. Place the MaxMind databases in the project at:
 data/maxmind/GeoLite2-ASN.mmdb data/maxmind/GeoLite2-City.mmdb
 ### 2. Create a `.env` file in the project root with:
@@ -34,6 +35,22 @@ ENRICH_IPS=true
 /opt/homebrew/bin/python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
+
+---
+
+## Quick Start
+
+Try CamTrace immediately using the included sample flow file:
+
+## Enrich sample flows and view as JSONL
+camtrace --enrich --in examples/flows.jsonl --out -
+
+## Enrich sample flows and save as CSV
+camtrace --enrich --in examples/flows.jsonl --out flows.csv --csv
+
+Example output (truncated):
+{"ts":"2025-09-23T14:30:00Z","proto":"udp","src_ip":"192.168.1.10","dst_ip":"8.8.8.8","dst_port":53,"dst_ptr":"dns.google","dst_asn":15169,"dst_as_org":"GOOGLE","dst_country_iso":"US","dst_country_name":"United States"}
+{"ts":"2025-09-23T14:30:05Z","proto":"udp","src_ip":"192.168.1.10","dst_ip":"1.1.1.1","dst_port":53,"dst_ptr":"one.one.one.one","dst_asn":13335,"dst_as_org":"CLOUDFLARENET"}
 
 ---
 
