@@ -1,24 +1,43 @@
 # macOS
 .DS_Store
 
-# Python
+# Python cache / build
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+htmlcov/
+.coverage
+.pytest_cache/
 
-# Virtual envs
+# Virtualenvs
 .venv/
 venv/
 
-# Local environment (secrets/paths)
+# Environment (secrets)
 .env
+*.env
 
-# MaxMind GeoLite databases (license-restricted, local only)
+# Logs / reports / artifacts
+reports/
+*.log
+capture.pcap
+enriched.csv
+flows.csv
+flows.jsonl
+results/
+
+# GeoIP databases (license-restricted, local only)
+*.mmdb
 data/maxmind/*.mmdb
 data/maxmind/*.tar.gz
 data/maxmind/*_*/
 
-# Build / dist
-build/
-dist/
-*.egg-info/
+# IDE/editor settings
+.vscode/
+.idea/
