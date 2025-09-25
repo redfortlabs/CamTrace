@@ -1,9 +1,14 @@
 # quick test script to confirm email works before wiring it into the report job
 
 import sys, pathlib
+from pathlib import Path
 
-# Add ./src to sys.path so "camtrace" can be imported without installing package
-sys.path.append(str(pathlib.Path(__file__).parent.joinpath("src")))
+# Make sure we can import from ./src
+sys.path.append(str(Path(__file__).parent / "src"))
+
+# Load .env from project root (same folder as this script)
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=Path(__file__).parent / ".env")
 
 from camtrace.alert_email import send_email
 
