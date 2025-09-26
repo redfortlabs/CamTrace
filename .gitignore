@@ -32,7 +32,10 @@ capture.pcap
 enriched.csv
 flows.csv
 flows.jsonl
+flows.*
 results/
+.pcap
+*.pcapng
 
 # GeoIP databases (license-restricted, local only)
 *.mmdb
