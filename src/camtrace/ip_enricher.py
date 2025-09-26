@@ -3,15 +3,13 @@ from __future__ import annotations
 
 import os
 from functools import lru_cache
-from typing import Optional
-
-from dotenv import load_dotenv
-from pydantic import BaseModel
-from geoip2.database import Reader
-from geoip2.errors import AddressNotFoundError
 
 import dns.resolver
 import dns.reversename
+from dotenv import load_dotenv
+from geoip2.database import Reader
+from geoip2.errors import AddressNotFoundError
+from pydantic import BaseModel
 
 # Load .env once on import
 load_dotenv()
@@ -19,22 +17,25 @@ load_dotenv()
 # ---- Config from environment ----
 ASN_DB_PATH = os.getenv("MAXMIND_ASN_DB", "./data/maxmind/GeoLite2-ASN.mmdb")
 CITY_DB_PATH = os.getenv("MAXMIND_CITY_DB", "./data/maxmind/GeoLite2-City.mmdb")
-DNS_RESOLVER = os.getenv("DNS_RESOLVER", "").strip()  # e.g., "1.1.1.1" or blank for system default
+DNS_RESOLVER = os.getenv(
+    "DNS_RESOLVER", ""
+).strip()  # e.g., "1.1.1.1" or blank for system default
+
 
 # ---- Pydantic return model ----
 class EnrichedIP(BaseModel):
     ip: str
-    ptr: Optional[str] = None
+    ptr: str | None = None
 
-    asn: Optional[int] = None
-    as_org: Optional[str] = None
+    asn: int | None = None
+    as_org: str | None = None
 
-    country_iso: Optional[str] = None
-    country_name: Optional[str] = None
-    region: Optional[str] = None
-    city: Optional[str] = None
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    country_iso: str | None = None
+    country_name: str | None = None
+    region: str | None = None
+    city: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 
 def _build_resolver() -> dns.resolver.Resolver:
@@ -54,7 +55,9 @@ class IPEnricher:
     Keeping one instance around and call .resolve(ip).
     """
 
-    def __init__(self, asn_db_path: str = ASN_DB_PATH, city_db_path: str = CITY_DB_PATH):
+    def __init__(
+        self, asn_db_path: str = ASN_DB_PATH, city_db_path: str = CITY_DB_PATH
+    ):
         # Validate files exist early with friendly errors
         for label, path in (("ASN DB", asn_db_path), ("City DB", city_db_path)):
             if path and not os.path.isfile(path):
@@ -76,7 +79,7 @@ class IPEnricher:
             self._city_reader.close()
 
     # ---- Internal helpers ----
-    def _ptr_lookup(self, ip: str) -> Optional[str]:
+    def _ptr_lookup(self, ip: str) -> str | None:
         try:
             rev = dns.reversename.from_address(ip)
             ans = self._resolver.resolve(rev, "PTR")
@@ -85,7 +88,7 @@ class IPEnricher:
         except Exception:
             return None
 
-    def _asn_lookup(self, ip: str) -> tuple[Optional[int], Optional[str]]:
+    def _asn_lookup(self, ip: str) -> tuple[int | None, str | None]:
         if not self._asn_reader:
             return None, None
         try:
