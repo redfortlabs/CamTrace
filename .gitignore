@@ -22,6 +22,8 @@ venv/
 # Environment (secrets)
 .env
 *.env
+**/.env
+secrets/*.json
 
 # Logs / reports / artifacts
 reports/
