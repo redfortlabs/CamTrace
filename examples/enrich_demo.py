@@ -1,6 +1,7 @@
 # examples/enrich_demo.py
 import os
 import sys
+
 from dotenv import load_dotenv
 
 # Ensure src is on sys.path for a quick demo run

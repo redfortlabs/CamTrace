@@ -33,6 +33,6 @@ def send_email(subject: str, body_text: str) -> None:
     msg["To"] = to_addr
 
     with smtplib.SMTP(host, port, timeout=20) as server:
-        server.starttls()          # upgrade connection to TLS
+        server.starttls()  # upgrade connection to TLS
         server.login(user, app_pw)
         server.sendmail(from_addr, [to_addr], msg.as_string())

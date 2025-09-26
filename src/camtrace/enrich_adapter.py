@@ -1,8 +1,8 @@
 # src/camtrace/enrich_adapter.py
 from __future__ import annotations
 
-from typing import Dict, Any
 import ipaddress
+from typing import Any
 
 from camtrace.ip_enricher import resolve_ip
 
@@ -14,14 +14,20 @@ def _is_public(ip: str | None) -> bool:
         return False
 
 
-def _apply(prefix: str, ip: str | None, rec: Dict[str, Any]) -> None:
+def _apply(prefix: str, ip: str | None, rec: dict[str, Any]) -> None:
     # Skip enrichment for private/reserved/invalid IPs,
     # but ensure columns exist (set to None) for CSV.
     if not _is_public(ip):
         for key in (
-            "ptr", "asn", "as_org",
-            "country_iso", "country_name", "region", "city",
-            "latitude", "longitude",
+            "ptr",
+            "asn",
+            "as_org",
+            "country_iso",
+            "country_name",
+            "region",
+            "city",
+            "latitude",
+            "longitude",
         ):
             rec.setdefault(f"{prefix}{key}", None)
         return
@@ -38,7 +44,9 @@ def _apply(prefix: str, ip: str | None, rec: Dict[str, Any]) -> None:
     rec[f"{prefix}longitude"] = e.longitude
 
 
-def enrich_flow_record(flow: Dict[str, Any], src_key: str = "src_ip", dst_key: str = "dst_ip") -> Dict[str, Any]:
+def enrich_flow_record(
+    flow: dict[str, Any], src_key: str = "src_ip", dst_key: str = "dst_ip"
+) -> dict[str, Any]:
     _apply("src_", flow.get(src_key), flow)
     _apply("dst_", flow.get(dst_key), flow)
     return flow

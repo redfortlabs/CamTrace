@@ -14,6 +14,8 @@ dist/
 htmlcov/
 .coverage
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
 
 # Virtualenvs
 .venv/
@@ -43,6 +45,10 @@ data/maxmind/*.mmdb
 data/maxmind/*.tar.gz
 data/maxmind/*_*/
 
+# Pre-commit baseline
+.secrets.baseline
+
 # IDE/editor settings
 .vscode/
 .idea/
+

@@ -4,12 +4,23 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import logging
 import os
 import sys
-from typing import Dict, Any, Iterable
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any
 
-from dotenv import load_dotenv
 from camtrace.enrich_adapter import enrich_flow_record
+
+# Optional: load .env only in dev when explicitly requested
+if os.getenv("CAMTRACE_USE_DOTENV") == "1":
+    try:
+        from dotenv import load_dotenv  # dev-only extra
+
+        load_dotenv(dotenv_path=Path(__file__).resolve().parents[2] / ".env")
+    except (ImportError, OSError) as e:
+        logging.getLogger(__name__).warning("dotenv load skipped: %s", e)
 
 
 # ----------------- CLI args -----------------
@@ -23,8 +34,15 @@ def parse_args(argv=None):
         default=os.getenv("ENRICH_IPS", "false").lower() == "true",
         help="Enrich IPs (default based on ENRICH_IPS env var).",
     )
-    p.add_argument("--in", dest="infile", default="-", help="Input JSONL (default: stdin)")
-    p.add_argument("--out", dest="outfile", default="-", help="Output (JSONL/CSV) (default: stdout)")
+    p.add_argument(
+        "--in", dest="infile", default="-", help="Input JSONL (default: stdin)"
+    )
+    p.add_argument(
+        "--out",
+        dest="outfile",
+        default="-",
+        help="Output (JSONL/CSV) (default: stdout)",
+    )
     p.add_argument(
         "--csv",
         action="store_true",
@@ -34,7 +52,7 @@ def parse_args(argv=None):
 
 
 # ----------------- I/O helpers -----------------
-def iter_jsonl(fh) -> Iterable[Dict[str, Any]]:
+def iter_jsonl(fh) -> Iterable[dict[str, Any]]:
     for line in fh:
         line = line.strip()
         if not line:
@@ -42,18 +60,40 @@ def iter_jsonl(fh) -> Iterable[Dict[str, Any]]:
         yield json.loads(line)
 
 
-def write_jsonl(records: Iterable[Dict[str, Any]], fh) -> None:
+def write_jsonl(records: Iterable[dict[str, Any]], fh) -> None:
     for rec in records:
         fh.write(json.dumps(rec, separators=(",", ":")) + "\n")
 
 
 CSV_COLUMNS = [
-    "ts", "proto", "src_ip", "src_port", "dst_ip", "dst_port", "bytes", "pkts",
-    "src_ptr", "src_asn", "src_as_org", "src_country_iso", "src_country_name",
-    "src_region", "src_city", "src_latitude", "src_longitude",
-    "dst_ptr", "dst_asn", "dst_as_org", "dst_country_iso", "dst_country_name",
-    "dst_region", "dst_city", "dst_latitude", "dst_longitude",
+    "ts",
+    "proto",
+    "src_ip",
+    "src_port",
+    "dst_ip",
+    "dst_port",
+    "bytes",
+    "pkts",
+    "src_ptr",
+    "src_asn",
+    "src_as_org",
+    "src_country_iso",
+    "src_country_name",
+    "src_region",
+    "src_city",
+    "src_latitude",
+    "src_longitude",
+    "dst_ptr",
+    "dst_asn",
+    "dst_as_org",
+    "dst_country_iso",
+    "dst_country_name",
+    "dst_region",
+    "dst_city",
+    "dst_latitude",
+    "dst_longitude",
 ]
+
 
 def _as_int(x):
     try:
@@ -61,11 +101,13 @@ def _as_int(x):
     except (TypeError, ValueError):
         return ""
 
+
 def _as_float(x):
     try:
         return float(x)
     except (TypeError, ValueError):
         return ""
+
 
 NUMERIC_FIELDS = {
     "src_port": _as_int,
@@ -80,7 +122,8 @@ NUMERIC_FIELDS = {
     "dst_longitude": _as_float,
 }
 
-def write_csv(records: Iterable[Dict[str, Any]], fh) -> None:
+
+def write_csv(records: Iterable[dict[str, Any]], fh) -> None:
     writer = csv.DictWriter(fh, fieldnames=CSV_COLUMNS, extrasaction="ignore")
     writer.writeheader()
     for rec in records:
@@ -97,13 +140,18 @@ def main(argv=None) -> int:
     load_dotenv()
     args = parse_args(argv)
 
-    in_fh = sys.stdin if args.infile in ("-", "") else open(args.infile, "r", encoding="utf-8")
-    out_fh = sys.stdout if args.outfile in ("-", "") else open(args.outfile, "w", encoding="utf-8")
+    in_fh = (
+        sys.stdin if args.infile in ("-", "") else open(args.infile, encoding="utf-8")
+    )
+    out_fh = (
+        sys.stdout
+        if args.outfile in ("-", "")
+        else open(args.outfile, "w", encoding="utf-8")
+    )
 
     try:
         records = iter_jsonl(in_fh)
 
-     
         # optional enrichment (avoid self-referential generator)
         if args.enrich:
             orig_records = records  # capture the original iterator
@@ -115,7 +163,6 @@ def main(argv=None) -> int:
                     yield rec
 
             records = gen(orig_records)
-
 
         # output
         if args.csv:
